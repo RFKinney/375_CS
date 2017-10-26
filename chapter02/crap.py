@@ -39,8 +39,12 @@ def main():
             re_roll(total)
 
         print() # Blank line for spacing
-        play_again = (input("Press enter to play another round or type 'N' to quit ") == "")
-        clear_screen()
+        if winnings < 5:
+            print("You don't have enough money to play again, better luck next time.")
+            play_again = False
+        else:
+            play_again = (input("Press enter to play another round or type 'N' to quit ") == "")
+            clear_screen()
 
 
 def clear_screen():
