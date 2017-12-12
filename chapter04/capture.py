@@ -6,9 +6,12 @@
 
 from graphics import *
 from random import *
+from math import *
 
 def main():
     print("Press the arrow keys to move the white circle, press 'q' to quit")
+
+    score = 0
 
     window_size = 600
     bounds = 20
@@ -17,6 +20,10 @@ def main():
     win.setCoords(0, 0, bounds, bounds)
     win.setBackground("black")
 
+    score_text = Text(Point(2,18), "Score:")
+    score_text.setTextColor("white")
+    score_text.draw(win)
+
     circle = Circle(Point(bounds / 2, bounds / 2), 2)
     circle.setFill("white")
     circle.draw(win)
@@ -24,7 +31,8 @@ def main():
     pellet = Circle(Point(0, 0), 1)
     pellet.setFill("yellow")
     pellet.draw(win)
-    move_to_random_point(pellet, bounds+1)
+    collide(circle, pellet)
+    move_to_random_point(pellet, bounds)
 
     while True:
         key = win.getKey()
@@ -46,22 +54,29 @@ def main():
         circle.move(delta_x, delta_y)
 
         if collide(circle,pellet):
-            move_to_random_point(pellet,bounds+1)
+            move_to_random_point(pellet,bounds)
+            score += 1
+            print("score =", score)
 
-def collide(circle, pellet):
+def collide(c1, c2):
+    a = c1.getCenter().getX() - c2.getCenter().getX()
+    b = c1.getCenter().getY() - c2.getCenter().getY()
 
+    c = sqrt(a**2 + b**2)
 
-def move_to_random_point(pellet, bounds):
-    next_x = randrange(0,bounds+1)
-    next_y = randrange(0,bounds+1)
+    return c <= (c1.getRadius() + c2.getRadius())
 
-    current_x = pellet.getCenter().getX()
-    current_y = pellet.getCenter().getY()
+def move_to_random_point(circle, bounds):
+    next_x = randrange(circle.getRadius(),bounds+1-circle.getRadius())
+    next_y = randrange(circle.getRadius(),bounds+1-circle.getRadius())
+
+    current_x = circle.getCenter().getX()
+    current_y = circle.getCenter().getY()
 
     delta_x = next_x - current_x
     delta_y = next_y - current_y
 
-    pellet.move(delta_x, delta_y)
+    circle.move(delta_x, delta_y)
 
 main()
 
