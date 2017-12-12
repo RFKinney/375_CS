@@ -12,7 +12,7 @@ def main():
     print("Press the arrow keys to move the white circle, press 'q' to quit")
 
     score = 0
-
+    timer = 6
     window_size = 600
     bounds = 20
 
@@ -20,8 +20,16 @@ def main():
     win.setCoords(0, 0, bounds, bounds)
     win.setBackground("black")
 
+    timer_text = Text(Point(17,18), "Timer:")
+    timer_text.setTextColor("white")
+    timer_text.setFace("courier")
+    timer_text.setSize(24)
+    timer_text.draw(win)
+
     score_text = Text(Point(2,18), "Score:")
     score_text.setTextColor("white")
+    score_text.setFace("courier")
+    score_text.setSize(24)
     score_text.draw(win)
 
     circle = Circle(Point(bounds / 2, bounds / 2), 2)
@@ -34,8 +42,10 @@ def main():
     collide(circle, pellet)
     move_to_random_point(pellet, bounds)
 
-    while True:
-        key = win.getKey()
+    time_check = time.time()
+
+    while timer > 0:
+        key = win.checkKey()
 
         delta_x = 0
         delta_y = 0
@@ -56,7 +66,24 @@ def main():
         if collide(circle,pellet):
             move_to_random_point(pellet,bounds)
             score += 1
-            print("score =", score)
+            score_text.setText("Score:" + str(score))
+
+        if time.time() - time_check > 1:
+            timer -= 1
+            time_check = time.time()
+            timer_text.setText("Timer:" + str(timer))
+
+    while timer < 1:
+        endgame = Text(Point(10,10), "Game Over Press Q to quite")
+        endgame.setTextColor("red")
+        endgame.setFace("courier")
+        endgame.setSize(24)
+        endgame.draw(win)
+
+        key=win.checkKey()
+
+        if key == "q":
+            break
 
 def collide(c1, c2):
     a = c1.getCenter().getX() - c2.getCenter().getX()
