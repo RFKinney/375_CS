@@ -12,7 +12,7 @@ def main():
     print("Press the arrow keys to move the white circle, press 'q' to quit")
 
     score = 0
-    timer = 6
+    timer = 60
     window_size = 600
     bounds = 20
 
