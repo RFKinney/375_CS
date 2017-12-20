@@ -75,7 +75,7 @@ def main():
             shoot(win)
             laser_shot = True
 
-        if laser_shot = True:
+        if laser_shot = True
             laser.move(0, 0.5)
 
 def shoot(win):
